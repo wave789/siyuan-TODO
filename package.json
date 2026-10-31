@@ -1,6 +1,6 @@
 {
   "name": "siyuan-todo",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,9 +8,10 @@
     "icons": "node scripts/prepare-assets.mjs --png",
     "build": "tsc --noEmit && node scripts/prepare-assets.mjs && vite build && node scripts/build-plugin.mjs",
     "build:plugin": "tsc --noEmit && node scripts/build-plugin.mjs",
-    "test": "node --import tsx --test --test-isolation=none tests/*.test.ts",
+    "test": "node --import tsx --test --test-isolation=none tests/*.test.ts tests/*.test.mjs",
     "test:ui": "playwright test",
-    "preview": "vite preview --host 0.0.0.0"
+    "preview": "vite preview --host 0.0.0.0",
+    "validate:marketplace": "node scripts/validate-marketplace.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",

@@ -2,7 +2,7 @@
   "name": "siyuan-todo",
   "author": "wave789",
   "url": "https://github.com/wave789/siyuan-TODO",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "icon": "icon.png",
   "minAppVersion": "3.8.0",
   "backends": [
@@ -23,7 +23,7 @@
     "zh-CN": "让每一件小事有序发生。待办管理、年/月/周/日历、到期提醒与 JSON 导入导出。"
   },
   "readme": {
-    "default": "README.md",
+    "default": "README.en.md",
     "zh-CN": "README.md"
   },
   "keywords": [
@@ -36,6 +36,8 @@
   ],
   "preview": "preview.png",
   "funding": {
-    "custom": ["https://github.com/wave789/siyuan-TODO/blob/main/assets/wechat-reward.png"]
+    "custom": [
+      "https://github.com/wave789/siyuan-TODO/blob/main/assets/wechat-reward.png"
+    ]
   }
 }
