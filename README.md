@@ -57,7 +57,8 @@ npm run build
 
 请通过 [GitHub Issues](https://github.com/wave789/siyuan-TODO/issues) 反馈，附上插件版本、思源版本及复现步骤。请勿上传含有私人任务内容的备份。
 
-如愿意支持维护，可查看作者提供的[微信赞赏码](assets/wechat-reward.png)。赞赏完全自愿，不影响任何功能。
+赞赏完全自愿，不影响任何功能。
+![微信赞赏码](assets/wechat-reward.png)。
 
 ## 许可证
 
