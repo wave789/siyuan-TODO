@@ -1,0 +1,83 @@
+/* Host mode wins over the OS preference; CSS updates immediately on theme switch. */
+:where(.stodo-app, .stodo-dock) {
+  --sx-color-scheme: light;
+  --sx-bg: var(--b3-theme-background, #fafbf8);
+  --sx-paper: var(--b3-theme-background, #ffffff);
+  --sx-surface: var(--b3-theme-surface, #f2f5ee);
+  --sx-sidebar: var(--b3-theme-surface, #f6f7f3);
+  --sx-rail: #eff1eb;
+  --sx-ink: var(--b3-theme-on-background, #303b35);
+  --sx-secondary: var(--b3-theme-on-surface, #74816e);
+  --sx-muted: #8c9885;
+  --sx-faint: #9da992;
+  --sx-line: var(--b3-border-color, #e1e7dc);
+  --sx-line-strong: #c6d3bd;
+  --sx-green: #537762;
+  --sx-green-light: #edf3ed;
+  --sx-accent-hover: #42664f;
+  --sx-on-accent: #ffffff;
+  --sx-selected: #eef5e8;
+  --sx-hover: #eaf0e8;
+  --sx-focus: #80a48a;
+  --sx-focus-ring: #80a48a30;
+  --sx-danger: #b5765e;
+  --sx-danger-bg: #fbf1eb;
+  --sx-danger-fill: #ad725c;
+  --sx-on-danger: #ffffff;
+  --sx-shadow: #22331716;
+  --sx-overlay: #26321e38;
+  --sx-sage: #6e9279; --sx-sage-bg: #edf3eb; --sx-sage-ink: #52765d;
+  --sx-amber: #c5a16a; --sx-amber-bg: #f8f0e2; --sx-amber-ink: #9d7640;
+  --sx-blue: #829aaa; --sx-blue-bg: #edf2f6; --sx-blue-ink: #617e95;
+  --sx-violet: #a599b2; --sx-violet-bg: #f1edf4; --sx-violet-ink: #877699;
+}
+
+:root[data-theme-mode='dark'] :where(.stodo-app, .stodo-dock) {
+  --sx-color-scheme: dark;
+  --sx-bg: var(--b3-theme-background, #1c221f);
+  --sx-paper: var(--b3-theme-background, #222a25);
+  --sx-surface: var(--b3-theme-surface, #29322c);
+  --sx-sidebar: var(--b3-theme-surface, #202823);
+  --sx-rail: #18201b;
+  --sx-ink: var(--b3-theme-on-background, #e1e9e3);
+  --sx-secondary: var(--b3-theme-on-surface, #b4c2b7);
+  --sx-muted: #a0b0a4;
+  --sx-faint: #8c9d91;
+  --sx-line: var(--b3-border-color, #36453b);
+  --sx-line-strong: #516657;
+  --sx-green: #9dcab0;
+  --sx-green-light: #2c4033;
+  --sx-accent-hover: #b4ddc5;
+  --sx-on-accent: #172b1e;
+  --sx-selected: #2d4436;
+  --sx-hover: #324138;
+  --sx-focus: #afd1bc;
+  --sx-focus-ring: #9dcab030;
+  --sx-danger: #e4b09a;
+  --sx-danger-bg: #3d2d27;
+  --sx-danger-fill: #c69077;
+  --sx-on-danger: #241a15;
+  --sx-shadow: #00000038;
+  --sx-overlay: #0000008c;
+  --sx-sage: #9cc8a9; --sx-sage-bg: #2d4033; --sx-sage-ink: #c0ddc7;
+  --sx-amber: #d4b27b; --sx-amber-bg: #423827; --sx-amber-ink: #ebce9e;
+  --sx-blue: #98b8cd; --sx-blue-bg: #2d3a45; --sx-blue-ink: #bbd4e5;
+  --sx-violet: #b8a5cc; --sx-violet-bg: #3b3145; --sx-violet-ink: #d5c3e5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-mode='light']):not([data-theme-mode='dark']) :where(.stodo-app, .stodo-dock) {
+    --sx-color-scheme: dark;
+    --sx-bg: #1c221f; --sx-paper: #222a25; --sx-surface: #29322c; --sx-sidebar: #202823; --sx-rail: #18201b;
+    --sx-ink: #e1e9e3; --sx-secondary: #b4c2b7; --sx-muted: #a0b0a4; --sx-faint: #8c9d91;
+    --sx-line: #36453b; --sx-line-strong: #516657;
+    --sx-green: #9dcab0; --sx-green-light: #2c4033; --sx-accent-hover: #b4ddc5; --sx-on-accent: #172b1e;
+    --sx-selected: #2d4436; --sx-hover: #324138; --sx-focus: #afd1bc; --sx-focus-ring: #9dcab030;
+    --sx-danger: #e4b09a; --sx-danger-bg: #3d2d27; --sx-danger-fill: #c69077; --sx-on-danger: #241a15;
+    --sx-shadow: #00000038; --sx-overlay: #0000008c;
+    --sx-sage: #9cc8a9; --sx-sage-bg: #2d4033; --sx-sage-ink: #c0ddc7;
+    --sx-amber: #d4b27b; --sx-amber-bg: #423827; --sx-amber-ink: #ebce9e;
+    --sx-blue: #98b8cd; --sx-blue-bg: #2d3a45; --sx-blue-ink: #bbd4e5;
+    --sx-violet: #b8a5cc; --sx-violet-bg: #3b3145; --sx-violet-ink: #d5c3e5;
+  }
+}

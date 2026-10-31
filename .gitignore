@@ -1,0 +1,9 @@
+node_modules/
+dist-preview/
+dist/
+artifacts/
+test-results/
+playwright-report/
+*.zip
+*.log
+.idea/

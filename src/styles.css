@@ -1,0 +1,516 @@
+@import './theme.css';
+/* Shared by the SiYuan dock, native tab and browser preview. All UI rules are scoped. */
+:where(.stodo-app, .stodo-dock) {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 15px; line-height: 1.5; color: var(--sx-ink); font-weight: 400;
+  -webkit-font-smoothing: antialiased; color-scheme: var(--sx-color-scheme);
+}
+:where(.stodo-app, .stodo-dock) *, :where(.stodo-app, .stodo-dock) *::before, :where(.stodo-app, .stodo-dock) *::after { box-sizing: border-box; }
+:where(.stodo-app, .stodo-dock) button, :where(.stodo-app, .stodo-dock) input, :where(.stodo-app, .stodo-dock) textarea, :where(.stodo-app, .stodo-dock) select { font: inherit; }
+:where(.stodo-app, .stodo-dock) button { color: inherit; cursor: pointer; border: 0; padding: 0; background: transparent; transition: background .15s, color .15s, border-color .15s, box-shadow .15s; }
+:where(.stodo-app, .stodo-dock) button:disabled { opacity: .45; cursor: default; }
+:where(.stodo-app, .stodo-dock) input, :where(.stodo-app, .stodo-dock) textarea, :where(.stodo-app, .stodo-dock) select { color: inherit; }
+:where(.stodo-app, .stodo-dock) button:focus-visible, :where(.stodo-app, .stodo-dock) input:focus-visible, :where(.stodo-app, .stodo-dock) textarea:focus-visible, :where(.stodo-app, .stodo-dock) select:focus-visible { outline: 2px solid var(--sx-focus); outline-offset: 3px; }
+:where(.stodo-app, .stodo-dock) h1, :where(.stodo-app, .stodo-dock) h2, :where(.stodo-app, .stodo-dock) h3, :where(.stodo-app, .stodo-dock) p { margin: 0; }
+:where(.stodo-app, .stodo-dock) svg { flex-shrink: 0; vertical-align: middle; }
+:where(.stodo-app, .stodo-dock) ::-webkit-scrollbar { width: 5px; height: 5px; }
+:where(.stodo-app, .stodo-dock) ::-webkit-scrollbar-thumb { background: var(--sx-line-strong); border-radius: 5px; }
+:where(.stodo-app, .stodo-dock) .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+:where(.stodo-app, .stodo-dock) [hidden] { display: none !important; }
+.stodo-app { display: flex; height: 100dvh; min-height: 540px; width: 100%; overflow: hidden; background: var(--sx-bg); }
+.stodo-app.plugin-mode { height: 100%; min-height: 0; }
+.stodo-dock { display: flex; height: 100%; min-height: 0; width: 100%; overflow: hidden; background: var(--sx-sidebar); }
+:where(.stodo-app, .stodo-dock) .color-sage { --task-color: var(--sx-sage); --task-bg: var(--sx-sage-bg); --task-ink: var(--sx-sage-ink); }
+:where(.stodo-app, .stodo-dock) .color-amber { --task-color: var(--sx-amber); --task-bg: var(--sx-amber-bg); --task-ink: var(--sx-amber-ink); }
+:where(.stodo-app, .stodo-dock) .color-blue { --task-color: var(--sx-blue); --task-bg: var(--sx-blue-bg); --task-ink: var(--sx-blue-ink); }
+:where(.stodo-app, .stodo-dock) .color-violet { --task-color: var(--sx-violet); --task-bg: var(--sx-violet-bg); --task-ink: var(--sx-violet-ink); }
+:where(.stodo-app, .stodo-dock) .calendar-marker-work { --calendar-marker-color: var(--sx-sage); }
+:where(.stodo-app, .stodo-dock) .calendar-marker-study { --calendar-marker-color: var(--sx-amber); }
+:where(.stodo-app, .stodo-dock) .calendar-marker-life { --calendar-marker-color: var(--sx-violet); }
+:where(.stodo-app, .stodo-dock) .calendar-marker-completed { --calendar-marker-color: var(--sx-faint); }
+:where(.stodo-app, .stodo-dock) .calendar-marker-custom { --calendar-marker-color: var(--task-color); }
+:where(.stodo-app, .stodo-dock) .icon-button { width: 29px; height: 29px; display: inline-flex; align-items: center; justify-content: center; color: var(--sx-secondary); border-radius: 6px; flex-shrink: 0; }
+:where(.stodo-app, .stodo-dock) .icon-button:hover { color: var(--sx-green); background: var(--sx-hover); }
+.stodo-app .app-rail { width: 61px; flex-shrink: 0; display: flex; align-items: center; flex-direction: column; gap: 13px; background: var(--sx-rail); border-right: 1px solid var(--sx-line); padding: 27px 0 20px; }
+.stodo-app .rail-logo { width: 35px; height: 35px; border-radius: 9px; display: grid; place-items: center; }
+.stodo-app .rail-divider { width: 23px; height: 1px; background: var(--sx-surface); margin: 9px 0 3px; }
+.stodo-app .rail-button { position: relative; width: 38px; height: 39px; display: grid; place-items: center; color: var(--sx-muted); border-radius: 8px; }
+.stodo-app .rail-button:hover { background: var(--sx-hover); color: var(--sx-green); }
+.stodo-app .rail-button.rail-active { color: var(--sx-green); background: var(--sx-selected); }
+.stodo-app .rail-button.rail-active::before { content: ''; position: absolute; width: 3px; height: 16px; background: var(--sx-green); left: -11px; border-radius: 0 3px 3px 0; }
+.stodo-app .rail-notification-dot { position: absolute; top: 7px; right: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--sx-green); }
+.stodo-app .rail-spacer { flex: 1; }
+.stodo-app .rail-avatar { border: 1px solid var(--sx-line); background: var(--sx-rail); color: var(--sx-secondary); width: 29px; height: 29px; border-radius: 50%; font: 500 14px Georgia, serif; margin-top: 5px; }
+:where(.stodo-app, .stodo-dock) .task-sidebar { width: 301px; flex-shrink: 0; border-right: 1px solid var(--sx-line); background: var(--sx-sidebar); display: flex; flex-direction: column; min-height: 0; }
+:where(.stodo-app, .stodo-dock) .sidebar-brand { padding: 28px 23px 29px; display: flex; align-items: center; }
+:where(.stodo-app, .stodo-dock) .sx-brand { display: flex; align-items: center; gap: 11px; }
+:where(.stodo-app, .stodo-dock) .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; flex-shrink: 0; }
+:where(.stodo-app, .stodo-dock) img[data-todo-icon="PluginIcon"] { display: block; object-fit: contain; flex-shrink: 0; }
+:where(.stodo-app, .stodo-dock) .sx-brand strong { font-size: 20px; font-weight: 650; letter-spacing: .2px; line-height: 1.25; display: flex; align-items: center; gap: 9px; }
+:where(.stodo-app, .stodo-dock) .sx-brand strong span { font-size: 12px; letter-spacing: 2.5px; color: var(--sx-secondary); font-weight: 450; padding-top: 4px; }
+:where(.stodo-app, .stodo-dock) .sx-brand p { font-size: 13px; color: var(--sx-muted); margin-top: 5px; letter-spacing: .35px; }
+:where(.stodo-app, .stodo-dock) .sidebar-title { display: flex; align-items: center; justify-content: space-between; padding: 0 19px 0 23px; margin-bottom: 15px; }
+:where(.stodo-app, .stodo-dock) .sidebar-title h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 9px; }
+:where(.stodo-app, .stodo-dock) .sidebar-title h2 span { font-size: 13px; color: var(--sx-secondary); background: var(--sx-surface); padding: 1px 6px; border-radius: 5px; font-weight: 500; }
+:where(.stodo-app, .stodo-dock) .search-box { margin: 0 21px; height: 34px; border: 1px solid var(--sx-line); background: var(--sx-paper); border-radius: 6px; display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .search-box input { border: 0; outline: 0; width: 100%; min-width: 0; padding: 0; background: transparent; font-size: 14px; }
+:where(.stodo-app, .stodo-dock) .search-box input::placeholder { color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .search-box kbd { font-size: 17px; font-family: inherit; color: var(--sx-faint); }
+:where(.stodo-app, .stodo-dock) .task-filters { display: flex; gap: 2px; margin: 17px 21px 14px; padding: 3px; border-radius: 6px; background: var(--sx-surface); }
+:where(.stodo-app, .stodo-dock) .task-filters button { flex: 1; height: 29px; font-size: 14px; color: var(--sx-secondary); border-radius: 4px; display: flex; gap: 6px; align-items: center; justify-content: center; white-space: nowrap; }
+:where(.stodo-app, .stodo-dock) .task-filters button span { font-size: 13px; opacity: .8; }
+:where(.stodo-app, .stodo-dock) .task-filters .is-active { background: var(--sx-paper); color: var(--sx-ink); box-shadow: 0 1px 3px var(--sx-shadow); font-weight: 550; }
+:where(.stodo-app, .stodo-dock) .list-subheading { margin: 0 23px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--sx-muted); gap: 5px; }
+:where(.stodo-app, .stodo-dock) .sort-button { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--sx-muted); white-space: nowrap; }
+:where(.stodo-app, .stodo-dock) .sort-wrapper { position: relative; }
+:where(.stodo-app, .stodo-dock) .sort-menu { position: absolute; right: 0; top: 23px; background: var(--sx-paper); box-shadow: 0 5px 20px var(--sx-shadow); border: 1px solid var(--sx-line); padding: 4px; border-radius: 6px; width: 130px; z-index: 10; }
+:where(.stodo-app, .stodo-dock) .sort-menu button { width: 100%; padding: 8px; font-size: 14px; display: flex; align-items: center; justify-content: space-between; border-radius: 3px; }
+:where(.stodo-app, .stodo-dock) .sort-menu button:hover { background: var(--sx-green-light); }
+:where(.stodo-app, .stodo-dock) .task-cards { padding: 0 16px 14px 21px; overflow-y: auto; flex: 1; min-height: 80px; }
+:where(.stodo-app, .stodo-dock) .task-card { position: relative; background: var(--sx-paper); border: 1px solid var(--calendar-marker-color); border-radius: 8px; margin-bottom: 10px; padding: 14px 13px 12px; transition: border-color .15s, box-shadow .15s; }
+:where(.stodo-app, .stodo-dock) .task-card:hover { box-shadow: 0 3px 9px var(--sx-shadow); }
+:where(.stodo-app, .stodo-dock) .task-card.task-selected { background: var(--sx-selected); }
+:where(.stodo-app, .stodo-dock) .task-card-top { display: flex; align-items: center; gap: 9px; margin-bottom: 11px; }
+:where(.stodo-app, .stodo-dock) .task-checkbox { width: 15px; height: 15px; border: 1.3px solid var(--calendar-marker-color); border-radius: 4px; display: grid; place-items: center; flex-shrink: 0; }
+:where(.stodo-app, .stodo-dock) .task-checkbox:hover { background: var(--sx-hover); }
+:where(.stodo-app, .stodo-dock) .task-checkbox.is-checked { background: var(--calendar-marker-color); color: var(--sx-on-accent); }
+:where(.stodo-app, .stodo-dock) .task-checkbox > svg { fill: none; stroke: currentColor; }
+:where(.stodo-app, .stodo-dock) .task-title { font-size: 15px; font-weight: 550; text-align: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; flex: 1; }
+:where(.stodo-app, .stodo-dock) .task-open-arrow { color: var(--sx-faint); opacity: 0; }
+:where(.stodo-app, .stodo-dock) .task-card:hover .task-open-arrow { opacity: 1; }
+:where(.stodo-app, .stodo-dock) .task-card-body { display: block; width: 100%; padding-left: 24px; text-align: left; }
+:where(.stodo-app, .stodo-dock) .task-time { display: flex; gap: 9px; align-items: center; line-height: 1.85; font-size: 13px; color: var(--sx-secondary); }
+:where(.stodo-app, .stodo-dock) .task-time span { font-size: 12px; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .task-time time { font-variant-numeric: tabular-nums; letter-spacing: .15px; }
+:where(.stodo-app, .stodo-dock) .task-progress-info { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 5px 8px; font-size: 11px; color: var(--sx-faint); margin: 11px 0 6px; }
+:where(.stodo-app, .stodo-dock) .task-progress-info > span:last-child { white-space: nowrap; }
+:where(.stodo-app, .stodo-dock) .task-progress-info b { font-size: 12px; font-weight: 500; margin-left: 4px; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .task-status { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+:where(.stodo-app, .stodo-dock) .task-status i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+:where(.stodo-app, .stodo-dock) .status-active { color: var(--sx-secondary); }
+:where(.stodo-app, .stodo-dock) .status-overdue { color: var(--sx-danger); }
+:where(.stodo-app, .stodo-dock) .status-upcoming { color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .status-completed { color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .task-progress { height: 4px; border-radius: 5px; background: var(--sx-surface); overflow: hidden; }
+:where(.stodo-app, .stodo-dock) .task-progress > span { height: 100%; display: block; border-radius: inherit; background: var(--task-color, var(--sx-green)); transition: width .3s; }
+:where(.stodo-app, .stodo-dock) .task-completed .task-title { text-decoration: line-through; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .list-end { display: flex; align-items: center; gap: 9px; margin: 20px 6px; color: var(--sx-faint); font-size: 12px; white-space: nowrap; }
+:where(.stodo-app, .stodo-dock) .list-end > span { height: 1px; flex: 1; background: var(--sx-surface); }
+:where(.stodo-app, .stodo-dock) .sidebar-empty { text-align: center; padding: 53px 5px; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .sidebar-empty strong { display: block; margin: 15px 0 7px; color: var(--sx-secondary); font-size: 14px; font-weight: 500; }
+:where(.stodo-app, .stodo-dock) .sidebar-empty p { font-size: 13px; margin-bottom: 13px; }
+:where(.stodo-app, .stodo-dock) .text-button { font-size: 14px; color: var(--sx-green); display: inline-flex; gap: 7px; align-items: center; }
+:where(.stodo-app, .stodo-dock) .sidebar-bottom { flex-shrink: 0; padding: 12px 21px 16px; border-top: 1px solid var(--sx-line); background: var(--sx-sidebar); }
+:where(.stodo-app, .stodo-dock) .gentle-note { display: flex; gap: 10px; color: var(--sx-muted); padding: 8px 2px 16px; align-items: center; }
+:where(.stodo-app, .stodo-dock) .gentle-note strong { display: block; font-size: 13px; font-weight: 500; color: var(--sx-secondary); letter-spacing: .4px; }
+:where(.stodo-app, .stodo-dock) .gentle-note p { font-size: 11px; color: var(--sx-muted); margin-top: 4px; }
+:where(.stodo-app, .stodo-dock) .sidebar-compact { width: 100%; border-right: 0; }
+:where(.stodo-app, .stodo-dock) .sidebar-compact .sidebar-brand { justify-content: space-between; padding: 19px 18px 25px; }
+.stodo-app .main-workspace { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+.stodo-app.editor-active .page-intro, .stodo-app.editor-active .stats-row { display: none; }
+.stodo-app .workspace-topbar { height: 57px; flex-shrink: 0; border-bottom: 1px solid var(--sx-line); display: flex; align-items: center; justify-content: space-between; padding: 0 31px 0 35px; background: var(--sx-paper); }
+.stodo-app .workspace-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.stodo-app .workspace-title h1 { font-size: 20px; line-height: 1.3; font-weight: 550; letter-spacing: .5px; color: var(--sx-secondary); white-space: nowrap; }
+.stodo-app .workspace-title > img[data-todo-icon="PluginIcon"] { width: 20px; height: 20px; align-self: center; }
+.stodo-app .workspace-top-actions { display: flex; align-items: center; gap: 10px; }
+.stodo-app .save-status { position: relative; display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--sx-muted); margin-right: 10px; cursor: help; }
+.stodo-app .save-error { color: var(--sx-danger); }
+.stodo-app .save-path-tooltip { position: absolute; top: calc(100% + 11px); right: 0; z-index: 60; width: max-content; max-width: min(520px, 80vw); padding: 12px 15px; border: 1px solid var(--sx-line-strong); border-radius: 7px; background: var(--sx-paper); color: var(--sx-ink); box-shadow: 0 6px 22px var(--sx-shadow); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .15s, visibility .15s; text-align: left; }
+.stodo-app .save-path-tooltip > span { display: block; margin-bottom: 5px; font-size: 12px; color: var(--sx-secondary); }
+.stodo-app .save-path-tooltip > code { display: block; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; white-space: normal; }
+.stodo-app .save-status:hover .save-path-tooltip, .stodo-app .save-status:focus-visible .save-path-tooltip { opacity: 1; visibility: visible; }
+.stodo-app .sidebar-toggle { margin-left: -9px; margin-right: -4px; }
+.stodo-app .workspace-scroll { overflow: auto; flex: 1; padding: 15px 35px 0; }
+.stodo-app .page-intro { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-bottom: 20px; }
+.stodo-app .intro-eyebrow { display: flex; align-items: center; gap: 7px; color: var(--sx-muted); font-size: 11px; letter-spacing: 1.5px; }
+.stodo-app .intro-eyebrow > span { width: 5px; height: 5px; border-radius: 50%; background: var(--sx-green); }
+.stodo-app .page-intro p { margin-top: 6px; font-size: 13px; color: var(--sx-muted); letter-spacing: .4px; }
+.stodo-app .intro-date { text-align: right; flex-shrink: 0; }
+.stodo-app .intro-date > span { color: var(--sx-secondary); font-size: 14px; letter-spacing: .5px; }
+.stodo-app .intro-date strong { display: block; margin-top: 6px; font-size: 12px; font-weight: 400; color: var(--sx-muted); }
+.stodo-app .intro-date strong > span { padding: 0 2px; color: var(--sx-faint); }
+.stodo-app .stats-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-bottom: 26px; }
+.stodo-app .stat-item { border: 1px solid var(--sx-line); background: var(--sx-paper); border-radius: 8px; padding: 12px 17px 11px; }
+.stodo-app .stat-top { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--sx-muted); }
+.stodo-app .stat-icon { width: 28px; height: 28px; border-radius: 7px; color: var(--sx-muted); background: var(--sx-surface); display: grid; place-items: center; }
+.stodo-app .stat-item > strong { display: block; font-size: 29px; font-weight: 500; line-height: 1; margin: 1px 0 10px; letter-spacing: 1px; font-variant-numeric: tabular-nums; color: var(--sx-ink); }
+.stodo-app .stat-item > strong > span { font-size: 12px; font-weight: 400; color: var(--sx-muted); margin-left: 7px; letter-spacing: 0; }
+.stodo-app .stat-item > p { color: var(--sx-muted); font-size: 11px; }
+.stodo-app .stat-sage .stat-icon { background: var(--sx-surface); color: var(--sx-secondary); }
+.stodo-app .stat-amber .stat-icon { background: var(--sx-amber-bg); color: var(--sx-amber-ink); }
+.stodo-app .stat-blue .stat-icon { background: var(--sx-blue-bg); color: var(--sx-blue-ink); }
+.stodo-app .calendar-panel { background: var(--sx-paper); border: 1px solid var(--sx-line); border-radius: 9px; overflow: hidden; }
+.stodo-app .view-toolbar { display: flex; align-items: center; gap: 20px; padding: 15px 21px; border-bottom: 1px solid var(--sx-line); }
+.stodo-app .view-switcher { display: flex; gap: 3px; padding: 3px; background: var(--sx-surface); border-radius: 6px; }
+.stodo-app .view-switcher > button { padding: 4px 17px; font-size: 14px; line-height: 21px; border-radius: 4px; color: var(--sx-muted); }
+.stodo-app .view-switcher > button.is-active { background: var(--sx-paper); color: var(--sx-secondary); box-shadow: 0 1px 3px var(--sx-shadow); font-weight: 600; }
+.stodo-app .view-switcher > button:hover:not(.is-active) { color: var(--sx-secondary); background: var(--sx-hover); }
+.stodo-app .view-caption { font-size: 12px; color: var(--sx-muted); display: flex; align-items: center; gap: 6px; }
+:where(.stodo-app, .stodo-dock) .primary-button, :where(.stodo-app, .stodo-dock) .secondary-button, :where(.stodo-app, .stodo-dock) .danger-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 34px; padding: 0 15px; border-radius: 5px; font-size: 14px; font-weight: 450; white-space: nowrap; }
+:where(.stodo-app, .stodo-dock) .primary-button { background: var(--sx-green); color: var(--sx-on-accent); border: 1px solid var(--sx-green); box-shadow: 0 2px 3px var(--sx-shadow); }
+:where(.stodo-app, .stodo-dock) .primary-button:hover { background: var(--sx-green); border-color: var(--sx-line-strong); }
+:where(.stodo-app, .stodo-dock) .secondary-button { border: 1px solid var(--sx-line); color: var(--sx-secondary); background: var(--sx-paper); }
+:where(.stodo-app, .stodo-dock) .secondary-button:hover { background: var(--sx-hover); color: var(--sx-green); }
+:where(.stodo-app, .stodo-dock) .danger-button { background: var(--sx-danger-fill); color: var(--sx-on-danger); }
+.stodo-app .new-task-button { margin-left: auto; height: 33px; padding: 0 13px; font-size: 13px; }
+.stodo-app .calendar-heading { padding: 20px 22px 19px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.stodo-app .calendar-navigation { display: flex; align-items: center; gap: 20px; }
+.stodo-app .calendar-navigation h2 { font-size: 18px; font-weight: 550; color: var(--sx-ink); letter-spacing: .5px; white-space: nowrap; }
+.stodo-app .date-arrows { display: flex; gap: 3px; align-items: center; }
+.stodo-app .date-arrows .icon-button { width: 24px; height: 26px; color: var(--sx-muted); }
+.stodo-app .today-button { font-size: 12px; border: 1px solid var(--sx-line); border-radius: 4px; height: 24px; padding: 0 8px; margin: 0 3px; color: var(--sx-secondary); }
+.stodo-app .today-button:hover { background: var(--sx-hover); }
+.stodo-app .calendar-filters { display: flex; align-items: center; gap: 11px; }
+.stodo-app .select-wrap { display: flex; align-items: center; position: relative; }
+.stodo-app .select-wrap select { width: 100%; appearance: none; border: 1px solid var(--sx-line); background: var(--sx-paper); padding: 7px 30px 7px 12px; border-radius: 5px; outline: 0; cursor: pointer; font-size: 14px; }
+.stodo-app .select-wrap > svg { position: absolute; right: 10px; pointer-events: none; color: var(--sx-muted); }
+.stodo-app .calendar-filters .select-wrap select { font-size: 12px; padding: 5px 25px 5px 23px; color: var(--sx-muted); border-color: var(--sx-line); }
+.stodo-app .category-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--sx-surface); position: absolute; left: 10px; pointer-events: none; }
+.stodo-app .completed-toggle { width: 28px; height: 28px; border: 1px solid var(--sx-line); border-radius: 5px; color: var(--sx-secondary); }
+.stodo-app .completed-toggle > svg { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.stodo-app .completed-toggle.is-active { background: var(--sx-selected); color: var(--sx-secondary); }
+.stodo-app .week-labels { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); height: 34px; background: var(--sx-surface); border-top: 1px solid var(--sx-line); border-bottom: 1px solid var(--sx-line); }
+.stodo-app .week-labels span { padding: 8px 14px; font-size: 13px; color: var(--sx-secondary); }
+.stodo-app .week-labels .is-weekend { color: var(--sx-muted); }
+.stodo-app .month-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.stodo-app .month-cell { position: relative; padding: 7px 6px; min-width: 0; border-right: 1px solid var(--sx-line); border-bottom: 1px solid var(--sx-line); background: var(--sx-paper); cursor: default; transition: background .15s; }
+.stodo-app .month-cell:nth-child(7n) { border-right: 0; }
+.stodo-app .month-cell:nth-last-child(-n+7) { border-bottom: 0; }
+.stodo-app .month-cell.weekend-cell { background: var(--sx-paper); }
+.stodo-app .month-cell.outside-month { background: var(--sx-surface); }
+.stodo-app .month-cell:hover { background: var(--sx-hover); }
+.stodo-app .month-cell.selected-day { background: var(--sx-selected); }
+.stodo-app .month-cell.selected-day::after { content: ''; position: absolute; inset: 0; border: 1px solid var(--sx-line-strong); pointer-events: none; }
+.stodo-app .month-cell, .stodo-app .agenda-day { cursor: pointer; }
+.stodo-app .month-cell:focus-visible, .stodo-app .agenda-day:focus-visible { outline: 2px solid var(--sx-focus); outline-offset: -2px; }
+.stodo-app .cell-top { height: 27px; display: flex; align-items: flex-start; margin-bottom: 5px; gap: 5px; }
+.stodo-app .day-number { width: 23px; height: 23px; font-size: 14px; border-radius: 50%; color: var(--sx-secondary); font-weight: 450; }
+.stodo-app .outside-month .day-number { color: var(--sx-faint); }
+.stodo-app .day-number.is-today { color: var(--sx-on-accent); background: var(--sx-green); }
+.stodo-app .day-number:hover { background: var(--sx-hover); }
+.stodo-app .day-number.is-today:hover { background: var(--sx-green); }
+.stodo-app .today-label { font-size: 11px; color: var(--sx-secondary); padding-top: 6px; }
+.stodo-app .cell-add { margin-left: auto; width: 19px; height: 20px; opacity: 0; border-radius: 3px; color: var(--sx-secondary); }
+.stodo-app .month-cell:hover .cell-add, .stodo-app .cell-add:focus-visible { opacity: 1; }
+.stodo-app .cell-add:hover { background: var(--sx-hover); }
+.stodo-app .cell-events { display: flex; flex-direction: column; gap: 4px; }
+.stodo-app .calendar-event { min-width: 0; display: flex; align-items: center; gap: 4px; background: var(--task-bg); color: var(--task-ink); font-size: 12px; padding: 4px 5px; border-radius: 3px; border-left: 2px solid var(--calendar-marker-color); text-align: left; line-height: 1.35; }
+.stodo-app .calendar-event:hover { box-shadow: 0 1px 3px var(--sx-shadow); }
+.stodo-app .calendar-event > svg { color: var(--calendar-marker-color); }
+.stodo-app .calendar-event > span:not(.event-dot) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.stodo-app .calendar-event time { font-size: 10px; opacity: .8; font-variant-numeric: tabular-nums; }
+.stodo-app .event-dot { display: none; }
+.stodo-app .calendar-event.event-completed > span:not(.event-dot), .stodo-app .calendar-event.event-completed > time, .stodo-app .agenda-task.event-completed .agenda-task-title > strong, .stodo-app .agenda-task.event-completed .agenda-task-time, .stodo-app .agenda-task.event-completed > small, .stodo-app .agenda-task.event-completed > p { opacity: .65; }
+.stodo-app .event-completed .agenda-task-title strong, .stodo-app .calendar-event.event-completed > span { text-decoration: line-through; }
+.stodo-app .more-events { color: var(--sx-muted); font-size: 11px; text-align: left; padding-left: 5px; margin-top: 1px; }
+.stodo-app .more-events:hover { color: var(--sx-secondary); }
+.stodo-app .calendar-legend { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--sx-line); color: var(--sx-muted); font-size: 11px; gap: 10px; }
+.stodo-app .calendar-legend > div { display: flex; align-items: center; gap: 15px; }
+.stodo-app .calendar-legend > div > span { display: flex; align-items: center; gap: 5px; }
+.stodo-app .legend-dot { display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: var(--calendar-marker-color); }
+.stodo-app .legend-completed { padding-left: 5px; color: var(--calendar-marker-color); }
+.stodo-app .day-overview { margin-top: 20px; border: 1px solid var(--sx-line); background: var(--sx-paper); border-radius: 8px; padding: 17px 20px 13px; }
+.stodo-app .day-overview-heading { display: flex; align-items: center; gap: 10px; }
+.stodo-app .overview-symbol { width: 42px; height: 42px; display: grid; place-items: center; background: var(--sx-green-light); color: var(--sx-green); border: 1px solid var(--sx-line); border-radius: 10px; flex-shrink: 0; }
+.stodo-app .day-overview-heading h3 { font-size: 14px; font-weight: 550; color: var(--sx-secondary); }
+.stodo-app .day-overview-heading p { font-size: 12px; color: var(--sx-muted); margin-top: 4px; }
+.stodo-app .overview-count { font-size: 20px; margin-left: auto; color: var(--sx-muted); }
+.stodo-app .overview-count i { font-size: 14px; font-style: normal; color: var(--sx-faint); }
+.stodo-app .overview-tasks { margin: 15px 0 0; padding: 0; list-style: none; }
+.stodo-app .overview-tasks > li + li { border-top: 1px solid var(--sx-line); }
+.stodo-app .overview-tasks > li > button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 13px 6px; text-align: left; border-radius: 5px; color: var(--sx-secondary); }
+.stodo-app .overview-tasks > li > button:hover { background: var(--sx-hover); color: var(--sx-ink); }
+.stodo-app .overview-task-number { width: 27px; flex-shrink: 0; text-align: center; color: var(--sx-muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+.stodo-app .overview-task-dot { width: 15px; height: 15px; border: 1px solid var(--calendar-marker-color); border-radius: 4px; color: var(--calendar-marker-color); display: grid; place-items: center; flex-shrink: 0; }
+.stodo-app .overview-task-dot > svg { fill: none; stroke: currentColor; }
+.stodo-app .overview-task-copy { flex: 1; min-width: 0; }
+.stodo-app .overview-task-copy > strong { display: block; font-size: 15px; font-weight: 500; color: var(--sx-ink); overflow-wrap: anywhere; }
+.stodo-app .overview-task-copy > span { display: block; font-size: 12px; line-height: 1.7; color: var(--sx-muted); margin-top: 4px; }
+.stodo-app .overview-completed .overview-task-copy > strong { text-decoration: line-through; color: var(--sx-muted); }
+.stodo-app .overview-task-status { max-width: 10em; flex-shrink: 0; font-size: 12px; text-align: right; overflow-wrap: anywhere; }
+.stodo-app .overview-tasks > li > button > svg { color: var(--sx-muted); }
+.stodo-app .empty-overview { width: 100%; display: flex; gap: 8px; align-items: center; text-align: left; margin-top: 15px; background: var(--sx-surface); padding: 13px; border-radius: 5px; color: var(--sx-muted); font-size: 14px; }
+.stodo-app .empty-overview > svg:last-child { margin-left: auto; }
+.stodo-app .strike { text-decoration: line-through; opacity: .65; }
+.stodo-app .workspace-footer { display: flex; align-items: center; justify-content: space-between; padding: 22px 1px 20px; color: var(--sx-faint); font-size: 11px; }
+.stodo-app .workspace-footer > span { display: flex; gap: 6px; align-items: center; }
+.stodo-app .workspace-footer img[data-todo-icon="PluginIcon"] { width: 1.2em; height: 1.2em; }
+.stodo-app .year-grid { display: grid; width: 100%; max-width: 1120px; margin-inline: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 25px 24px; padding: 0 22px 25px; }
+.stodo-app .mini-title { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid var(--sx-line); padding-bottom: 10px; margin-bottom: 9px; }
+.stodo-app .mini-title strong { font-size: 15px; color: var(--sx-secondary); font-weight: 550; }
+.stodo-app .mini-title > span { display: flex; align-items: center; gap: 5px; color: var(--sx-muted); font-size: 11px; }
+.stodo-app .mini-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px 2px; text-align: center; }
+.stodo-app .mini-days > button { font-size: 12px; color: var(--sx-muted); height: 24px; position: relative; border-radius: 4px; }
+.stodo-app .mini-days > button:hover:not(:disabled) { background: var(--sx-hover); }
+.stodo-app .mini-weekday { font-size: 11px; color: var(--sx-faint); margin-bottom: 3px; }
+.stodo-app .mini-days .mini-today { background: var(--sx-green); color: var(--sx-on-accent); }
+.stodo-app .mini-days .mini-selected { box-shadow: inset 0 0 0 1.5px var(--sx-green); background: var(--sx-selected); color: var(--sx-ink); }
+.stodo-app .mini-days .has-tasks::after { content: ''; position: absolute; left: calc(50% - 1.5px); bottom: 0; width: 3px; height: 3px; border-radius: 50%; background: var(--sx-green); }
+.stodo-app .agenda-view { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); min-height: 420px; border-top: 1px solid var(--sx-line); }
+.stodo-app .agenda-day { display: flex; flex-direction: column; min-width: 0; border-right: 1px solid var(--sx-line); }
+.stodo-app .agenda-day:last-child { border: 0; }
+.stodo-app .agenda-heading { flex-shrink: 0; padding: 15px 9px 12px; border-bottom: 1px solid var(--sx-line); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 5px; }
+.stodo-app .agenda-heading > button:first-child { text-align: left; }
+.stodo-app .agenda-heading > button:first-child > span { font-size: 12px; color: var(--sx-muted); display: block; }
+.stodo-app .agenda-heading strong { font-size: 24px; font-weight: 500; color: var(--sx-secondary); }
+.stodo-app .agenda-heading > span { font-size: 11px; color: var(--sx-faint); }
+.stodo-app .agenda-heading .icon-button { width: 17px; height: 23px; }
+.stodo-app .agenda-today { background: var(--sx-surface); }
+.stodo-app .agenda-selected { background: var(--sx-selected); box-shadow: inset 0 0 0 1px var(--sx-line-strong); }
+.stodo-app .agenda-today .agenda-heading strong { color: var(--sx-ink); }
+.stodo-app .agenda-items { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 10px 6px; }
+.stodo-app .agenda-task { flex-shrink: 0; width: 100%; padding: 9px 7px; margin-bottom: 8px; background: var(--task-bg); border-left: 2px solid var(--calendar-marker-color); border-radius: 3px; text-align: left; color: var(--task-ink); overflow: hidden; }
+.stodo-app .agenda-task-title { display: flex; gap: 8px; align-items: flex-start; }
+.stodo-app .agenda-task-title > .agenda-task-marker { display: block; flex: 0 0 4px; width: 4px; height: 18px; margin-top: 1px; border: 0; border-radius: 1px; background-color: var(--calendar-marker-color); opacity: 1; filter: none; }
+.stodo-app .agenda-task-title strong { flex: 1; min-width: 0; font-size: 13px; font-weight: 500; word-break: break-word; }
+.stodo-app .agenda-task-time { display: flex; align-items: flex-start; gap: 6px; font-size: 11px; line-height: 1.6; margin: 9px 0; color: var(--sx-secondary); }
+.stodo-app .agenda-task-time > svg { margin-top: 1px; fill: none; stroke: currentColor; }
+.stodo-app .agenda-task-time > span { flex: 1; min-width: 0; }
+.stodo-app .agenda-task > small { display: inline-block; border: 1px solid var(--calendar-marker-color); color: var(--calendar-marker-color); border-radius: 3px; padding: 0 4px; font-size: 11px; }
+.stodo-app .agenda-task > p { font-size: 14px; white-space: pre-wrap; margin-bottom: 15px; opacity: .8; }
+.stodo-app .agenda-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; width: 100%; min-height: 240px; padding: 24px 6px; gap: 14px; text-align: center; color: var(--sx-muted); }
+.stodo-app .agenda-empty > svg { fill: none; stroke: currentColor; }
+.stodo-app .agenda-empty-copy { width: 100%; text-align: center; }
+.stodo-app .agenda-empty-copy strong { display: block; font-size: 13px; line-height: 1.7; font-weight: 500; color: var(--sx-secondary); }
+.stodo-app .agenda-empty-copy .agenda-empty-create { display: inline-flex; align-items: center; justify-content: center; max-width: 100%; min-height: 30px; margin-top: 7px; padding: 4px 8px; border-radius: 5px; font-size: 13px; line-height: 1.7; color: var(--sx-green); text-align: center; white-space: normal; }
+.stodo-app .agenda-empty-copy .agenda-empty-create:hover { background: var(--sx-green-light); text-decoration: underline; text-underline-offset: 3px; }
+.stodo-app .agenda-single { grid-template-columns: 1fr; min-height: 350px; }
+.stodo-app .agenda-single .agenda-heading { padding: 17px 24px; flex-wrap: nowrap; }
+.stodo-app .agenda-single .agenda-heading > span { margin-left: auto; margin-right: 20px; font-size: 13px; }
+.stodo-app .agenda-single .agenda-heading > button:first-child { display: flex; align-items: center; gap: 12px; flex-direction: row-reverse; }
+.stodo-app .agenda-single .agenda-items { padding: 17px 24px; }
+.stodo-app .agenda-single .agenda-task { padding: 15px 18px; margin-bottom: 12px; }
+.stodo-app .agenda-single .agenda-task-title { gap: 9px; }
+.stodo-app .agenda-single .agenda-task-title strong { font-size: 15px; }
+.stodo-app .editor-tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--sx-line); background: var(--sx-surface); }
+.stodo-app .editor-tabs > button, .stodo-app .editor-tab-item { min-width: 107px; max-width: 210px; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--sx-line); font-size: 13px; color: var(--sx-muted); position: relative; }
+.stodo-app .editor-tabs > button { padding: 10px 14px; gap: 6px; flex-shrink: 0; }
+.stodo-app .editor-tab-item > button:first-child { display: flex; gap: 6px; align-items: center; padding: 10px 6px 10px 13px; min-width: 0; }
+.stodo-app .editor-tab-item > button > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stodo-app .editor-tab-item .close-tab { width: 23px; height: 22px; margin-right: 5px; flex-shrink: 0; border-radius: 4px; }
+.stodo-app .close-tab:hover { background: var(--sx-hover); color: var(--sx-ink); }
+.stodo-app .editor-tabs .active-editor-tab { background: var(--sx-paper); color: var(--sx-secondary); }
+.stodo-app .active-editor-tab::after { content: ''; height: 2px; background: var(--sx-green); position: absolute; bottom: 0; left: 0; right: 0; }
+.stodo-app .unsaved-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--sx-green); flex-shrink: 0; }
+.stodo-app .editor-container { max-width: 800px; margin: auto; padding: 28px 35px; }
+.stodo-app .editor-heading { display: flex; align-items: center; gap: 13px; margin-bottom: 27px; }
+.stodo-app .editor-heading-icon { width: 43px; height: 46px; background: var(--sx-surface); color: var(--sx-muted); border-radius: 10px; display: grid; place-items: center; }
+.stodo-app .eyebrow { font-size: 11px; letter-spacing: 1.5px; color: var(--sx-muted); }
+.stodo-app .editor-heading h2 { font-size: 21px; color: var(--sx-ink); font-weight: 500; letter-spacing: .5px; margin: 3px 0; }
+.stodo-app .editor-heading p { font-size: 12px; color: var(--sx-muted); }
+.stodo-app .completion-button { display: flex; align-items: center; gap: 6px; margin-left: auto; color: var(--sx-muted); font-size: 13px; border: 1px solid var(--sx-line); padding: 6px 9px; border-radius: 5px; }
+.stodo-app .completion-button:hover, .stodo-app .completion-button.is-completed { background: var(--sx-hover); color: var(--sx-secondary); }
+.stodo-app .task-form-fields { border: 0; padding: 0; margin: 0; min-width: 0; }
+.stodo-app .form-field { display: block; position: relative; margin-bottom: 22px; min-width: 0; }
+.stodo-app .form-field > span, .stodo-app .form-field > label { display: flex; align-items: center; gap: 7px; font-size: 14px; color: var(--sx-secondary); margin-bottom: 10px; }
+.stodo-app .form-field > span > b, .stodo-app .form-field > label > b { color: var(--sx-muted); font-size: 14px; font-weight: 400; }
+.stodo-app .form-field > input, .stodo-app .form-field > textarea { display: block; width: 100%; border: 1px solid var(--sx-line); border-radius: 6px; padding: 11px 13px; background: var(--sx-paper); font-size: 14px; color: var(--sx-secondary); outline: 0; line-height: 1.8; }
+.stodo-app .form-field > input:focus, .stodo-app .form-field > textarea:focus { border-color: var(--sx-line); box-shadow: 0 0 0 3px var(--sx-focus-ring); }
+.stodo-app .form-field > input::placeholder, .stodo-app .form-field > textarea::placeholder { color: var(--sx-faint); font-size: 14px; }
+.stodo-app .form-field > textarea { resize: vertical; min-height: 115px; }
+.stodo-app .title-field > input { font-size: 17px; padding-right: 75px; }
+.stodo-app .title-field > small { position: absolute; right: 12px; bottom: 16px; font-size: 11px; color: var(--sx-faint); }
+.stodo-app .form-time-row { display: flex; gap: 16px; align-items: center; }
+.stodo-app .form-time-row > .form-field { flex: 1; }
+.stodo-app .time-row-divider { padding-top: 3px; color: var(--sx-muted); }
+.stodo-app .date-trigger { display: flex; gap: 9px; width: 100%; border: 1px solid var(--sx-line); padding: 11px 12px; border-radius: 6px; background: var(--sx-paper); color: var(--sx-secondary); font-size: 14px; }
+.stodo-app .date-trigger > span { flex: 1; text-align: left; }
+.stodo-app .date-trigger > svg:last-child { margin-left: auto; }
+.stodo-app .date-trigger:hover, .stodo-app .date-trigger.is-open { border-color: var(--sx-line-strong); background: var(--sx-hover); }
+.stodo-app .sx-date-picker { position: relative; }
+.stodo-app .date-popover { position: absolute; z-index: 30; left: 0; top: calc(100% + 7px); width: 248px; background: var(--sx-paper); border: 1px solid var(--sx-line); border-radius: 9px; padding: 15px; box-shadow: 0 10px 35px var(--sx-shadow); }
+.stodo-app .picker-date-label { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--sx-muted); gap: 7px; }
+.stodo-app .picker-date-label > input { border: 1px solid var(--sx-line); font-size: 14px; padding: 6px 8px; border-radius: 4px; color: var(--sx-secondary); background: var(--sx-surface); }
+.stodo-app .wheel-heading { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--sx-muted); margin: 17px 0 8px; }
+.stodo-app .wheel-heading small { margin-left: auto; font-size: 11px; color: var(--sx-faint); }
+.stodo-app .time-wheels { display: flex; gap: 8px; align-items: center; border-top: 1px solid var(--sx-line); border-bottom: 1px solid var(--sx-line); padding: 7px 0; }
+.stodo-app .time-wheel { flex: 1; height: 145px; padding: 56.5px 0; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; }
+.stodo-app .time-wheel > button { display: block; width: 100%; height: 32px; padding: 0; border-radius: 4px; font-size: 14px; color: var(--sx-muted); scroll-snap-align: center; }
+.stodo-app .time-wheel > button:hover { background: var(--sx-hover); color: var(--sx-secondary); }
+.stodo-app .time-wheel > button.wheel-selected { background: var(--sx-selected); color: var(--sx-ink); font-weight: 600; }
+.stodo-app .wheel-colon { color: var(--sx-muted); }
+.stodo-app .picker-done { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--sx-green); color: var(--sx-on-accent); border-radius: 5px; padding: 7px; margin-top: 12px; font-size: 13px; }
+.stodo-app .form-options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 47px; }
+.stodo-app .form-options-row .select-wrap > select { color: var(--sx-secondary); padding: 10px 13px; background: var(--sx-paper); color-scheme: var(--sx-color-scheme); }
+.stodo-app .form-options-row .select-wrap > select option { color: var(--sx-secondary); background: var(--sx-paper); }
+.stodo-app .color-picker { display: flex; align-items: center; gap: 14px; height: 39px; }
+.stodo-app .color-swatch { width: 23px; height: 23px; display: grid; place-items: center; background: var(--task-color); color: var(--sx-on-accent); border-radius: 50%; }
+.stodo-app .color-swatch.selected { outline: 1px solid var(--task-color); outline-offset: 3px; }
+.stodo-app .reminder-setting { display: flex; align-items: center; gap: 12px; background: var(--sx-surface); border: 1px solid var(--sx-line); border-radius: 7px; padding: 14px; }
+.stodo-app .reminder-icon { color: var(--sx-muted); }
+.stodo-app .reminder-setting strong { font-size: 14px; font-weight: 500; color: var(--sx-secondary); }
+.stodo-app .reminder-setting p { font-size: 12px; color: var(--sx-muted); margin-top: 4px; }
+.stodo-app .reminder-setting > .select-wrap { margin-left: auto; min-width: 135px; }
+.stodo-app .reminder-setting select { font-size: 13px; color: var(--sx-secondary); background: var(--sx-paper); }
+.stodo-app .start-reminder { display: flex; gap: 6px; align-items: center; margin: 11px 0 21px; font-size: 13px; color: var(--sx-muted); cursor: pointer; }
+.stodo-app input[type=checkbox] { accent-color: var(--sx-green); width: 13px; height: 13px; }
+.stodo-app .editor-progress { margin: 20px 0; padding: 15px 0; border-top: 1px solid var(--sx-line); }
+.stodo-app .editor-progress > div:first-child { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--sx-muted); margin-bottom: 9px; }
+.stodo-app .editor-progress strong { font-size: 14px; font-weight: 500; margin-left: auto; }
+.stodo-app .editor-progress small { font-size: 12px; padding-left: 7px; color: var(--sx-muted); }
+.stodo-app .form-actions { display: flex; align-items: center; gap: 10px; padding-top: 20px; border-top: 1px solid var(--sx-line); }
+.stodo-app .form-actions > span { flex: 1; }
+.stodo-app .delete-button { color: var(--sx-danger); font-size: 13px; display: flex; gap: 6px; align-items: center; }
+.stodo-app .delete-button:hover { color: var(--sx-danger); }
+.stodo-app .form-error { font-size: 14px; color: var(--sx-danger); padding: 10px 13px; background: var(--sx-danger-bg); border-radius: 5px; margin: 14px 0; }
+.stodo-app .task-record { padding-top: 24px; }
+.stodo-app .task-record > button { width: 100%; display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--sx-muted); }
+.stodo-app .task-record > button > span { font-size: 11px; border-radius: 4px; padding: 1px 5px; background: var(--sx-surface); }
+.stodo-app .task-record > button > svg:last-child { margin-left: auto; transition: transform .2s; }
+.stodo-app .rotate-180 { transform: rotate(180deg); }
+.stodo-app .task-record > p { margin-top: 13px; font-size: 11px; color: var(--sx-faint); }
+.stodo-app .task-record ol { padding: 0; list-style: none; margin: 15px 0 0; }
+.stodo-app .task-record li { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 13px; color: var(--sx-muted); }
+.stodo-app .task-record li > i { width: 5px; height: 5px; border-radius: 50%; background: var(--sx-surface); }
+.stodo-app .task-record li > time { margin-left: auto; font-size: 12px; color: var(--sx-faint); }
+.stodo-app .deleted-task { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; min-height: 350px; color: var(--sx-danger); }
+:where(.stodo-app, .stodo-dock) .sx-toast { position: fixed; z-index: 2000; left: 50%; transform: translateX(-50%); bottom: 32px; display: flex; align-items: center; gap: 10px; padding: 13px 17px; background: var(--sx-paper); border: 1px solid var(--sx-line); box-shadow: 0 6px 25px var(--sx-shadow); border-radius: 8px; color: var(--sx-secondary); font-size: 14px; max-width: min(550px, 92vw); animation: sx-toast-in .2s ease; }
+:where(.stodo-app, .stodo-dock) .sx-toast > button { padding: 1px; margin-left: 6px; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .toast-error { color: var(--sx-danger); border-color: var(--sx-danger); }
+.stodo-app .action-menu-root { position: relative; }
+.stodo-app .action-menu { position: absolute; right: 0; top: 36px; padding: 6px; width: 155px; background: var(--sx-paper); border: 1px solid var(--sx-line); border-radius: 7px; box-shadow: 0 6px 24px var(--sx-shadow); z-index: 20; }
+.stodo-app .action-menu > button { width: 100%; padding: 10px; font-size: 14px; color: var(--sx-secondary); display: flex; align-items: center; gap: 9px; border-radius: 4px; }
+.stodo-app .action-menu > button:hover { background: var(--sx-hover); color: var(--sx-ink); }
+:where(.stodo-app, .stodo-dock) .sx-modal-backdrop { position: fixed; inset: 0; z-index: 1200; background: var(--sx-overlay); backdrop-filter: blur(3px); padding: 30px 20px; display: flex; align-items: center; justify-content: center; }
+:where(.stodo-app, .stodo-dock) .sx-modal { position: relative; background: var(--sx-paper); border: 1px solid var(--sx-line); box-shadow: 0 15px 70px var(--sx-shadow); border-radius: 14px; padding: 35px; width: 480px; max-width: 100%; max-height: calc(100dvh - 60px); overflow-y: auto; }
+:where(.stodo-app, .stodo-dock) .modal-close { position: absolute; top: 15px; right: 15px; }
+:where(.stodo-app, .stodo-dock) .sx-modal .sx-brand { margin-bottom: 29px; }
+:where(.stodo-app, .stodo-dock) .sx-modal h2 { color: var(--sx-ink); font-weight: 500; font-size: 25px; margin: 7px 0 12px; letter-spacing: .4px; }
+:where(.stodo-app, .stodo-dock) .sx-modal > p { color: var(--sx-muted); font-size: 14px; line-height: 1.8; }
+:where(.stodo-app, .stodo-dock) .help-features { margin: 27px 0; }
+:where(.stodo-app, .stodo-dock) .help-features > div { display: flex; gap: 14px; align-items: flex-start; padding: 11px 0; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .help-features strong { font-size: 14px; font-weight: 500; color: var(--sx-secondary); }
+:where(.stodo-app, .stodo-dock) .help-features p { font-size: 13px; margin-top: 5px; color: var(--sx-faint); }
+:where(.stodo-app, .stodo-dock) .storage-location { display: flex; align-items: flex-start; gap: 9px; color: var(--sx-muted); background: var(--sx-surface); padding: 13px; border-radius: 6px; margin-bottom: 24px; }
+:where(.stodo-app, .stodo-dock) .storage-location strong { display: block; font-size: 13px; font-weight: 500; color: var(--sx-muted); margin-bottom: 4px; }
+:where(.stodo-app, .stodo-dock) .storage-location code { font-size: 12px; color: var(--sx-muted); overflow-wrap: anywhere; }
+:where(.stodo-app, .stodo-dock) .storage-location p { font-size: 12px; margin-top: 6px; color: var(--sx-muted); }
+:where(.stodo-app, .stodo-dock) .full-width { width: 100%; }
+:where(.stodo-app, .stodo-dock) .modal-symbol { width: 53px; height: 53px; background: var(--sx-surface); color: var(--sx-muted); display: grid; place-items: center; border-radius: 13px; margin-bottom: 20px; }
+:where(.stodo-app, .stodo-dock) .modal-symbol.danger { background: var(--sx-danger-bg); color: var(--sx-danger); }
+:where(.stodo-app, .stodo-dock) .small-modal { width: 390px; }
+:where(.stodo-app, .stodo-dock) .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 27px; }
+:where(.stodo-app, .stodo-dock) .modal-section-title { font-size: 14px; color: var(--sx-secondary); font-weight: 500; margin: 24px 0 12px; }
+:where(.stodo-app, .stodo-dock) .notification-banner { display: flex; align-items: center; gap: 9px; background: var(--sx-surface); border: 1px solid var(--sx-line); border-radius: 6px; padding: 11px; margin-top: 23px; color: var(--sx-secondary); font-size: 13px; }
+:where(.stodo-app, .stodo-dock) .notification-banner > button { margin-left: auto; color: var(--sx-secondary); font-size: 12px; }
+:where(.stodo-app, .stodo-dock) .reminder-list > button { width: 100%; display: flex; gap: 11px; align-items: center; padding: 12px 4px; color: var(--sx-muted); text-align: left; border-bottom: 1px solid var(--sx-line); }
+:where(.stodo-app, .stodo-dock) .reminder-list > button:hover { background: var(--sx-hover); }
+:where(.stodo-app, .stodo-dock) .reminder-list strong { display: block; font-size: 14px; color: var(--sx-secondary); font-weight: 500; }
+:where(.stodo-app, .stodo-dock) .reminder-list small { display: block; font-size: 12px; color: var(--sx-muted); margin-top: 4px; }
+:where(.stodo-app, .stodo-dock) .reminder-list > button > svg:last-child { margin-left: auto; }
+:where(.stodo-app, .stodo-dock) .sx-modal > .modal-footnote { font-size: 12px; color: var(--sx-faint); margin-top: 20px; }
+:where(.stodo-app, .stodo-dock) .modal-empty { padding: 25px 0; text-align: center; color: var(--sx-faint); }
+:where(.stodo-app, .stodo-dock) .modal-empty > p { font-size: 13px; margin-top: 12px; }
+:where(.stodo-app, .stodo-dock) .settings-section { border-top: 1px solid var(--sx-line); margin-top: 24px; padding-top: 20px; }
+:where(.stodo-app, .stodo-dock) .settings-section > h3 { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--sx-secondary); margin-bottom: 11px; }
+:where(.stodo-app, .stodo-dock) .settings-section > p { color: var(--sx-muted); font-size: 13px; line-height: 1.9; }
+:where(.stodo-app, .stodo-dock) .settings-status { display: flex; align-items: center; justify-content: space-between; margin: 15px 0; }
+:where(.stodo-app, .stodo-dock) .settings-status > span { color: var(--sx-muted); font-size: 13px; display: flex; align-items: center; gap: 5px; }
+:where(.stodo-app, .stodo-dock) .settings-status i { width: 5px; height: 5px; border-radius: 50%; background: var(--sx-surface); }
+:where(.stodo-app, .stodo-dock) .settings-status .permission-on { background: var(--sx-green); }
+:where(.stodo-app, .stodo-dock) .settings-section > small { color: var(--sx-faint); font-size: 12px; line-height: 1.9; }
+:where(.stodo-app, .stodo-dock) .settings-path { display: block; padding: 12px; background: var(--sx-surface); color: var(--sx-muted); font-size: 13px; overflow-wrap: anywhere; border-radius: 5px; margin: 13px 0; }
+:where(.stodo-app, .stodo-dock) .settings-data-buttons { display: flex; gap: 12px; margin-top: 17px; }
+:where(.stodo-app, .stodo-dock) .import-summary { background: var(--sx-surface); padding: 17px; border-radius: 7px; margin-top: 20px; }
+:where(.stodo-app, .stodo-dock) .import-summary > span { display: flex; align-items: center; gap: 9px; color: var(--sx-secondary); font-size: 14px; }
+:where(.stodo-app, .stodo-dock) .import-summary > span > svg:last-child { margin-left: auto; }
+:where(.stodo-app, .stodo-dock) .import-summary p { color: var(--sx-muted); font-size: 13px; line-height: 1.9; margin-top: 12px; }
+.stodo-app .storage-error { background: var(--sx-danger-bg); border: 1px solid var(--sx-danger); border-radius: 6px; padding: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--sx-danger); font-size: 14px; }
+.stodo-app .storage-error > button { margin-left: auto; padding: 4px 8px; border: 1px solid var(--sx-danger); border-radius: 3px; white-space: nowrap; }
+.stodo-app .spin { animation: sx-spin 1s linear infinite; }
+@keyframes sx-spin { to { transform: rotate(360deg); } }
+@keyframes sx-toast-in { from { opacity: 0; bottom: 22px; } to { opacity: 1; bottom: 32px; } }
+@media (min-width: 1550px) {
+  .stodo-app .workspace-topbar { padding-left: 45px; }
+  .stodo-app .workspace-scroll { padding: 23px 45px 0; }
+  .stodo-app .month-grid { min-height: 560px; }
+  .stodo-app .task-sidebar { width: 320px; }
+  .stodo-app .task-card { padding-top: 17px; padding-bottom: 15px; }
+}
+@media (max-width: 1190px) {
+  .stodo-app .workspace-topbar { padding-left: 24px; }
+  .stodo-app .task-sidebar { width: 272px; }
+  .stodo-app .workspace-scroll { padding: 15px 24px 0; }
+  .stodo-app .intro-date { display: none; }
+  .stodo-app .calendar-event time { display: none; }
+  .stodo-app .calendar-navigation { gap: 10px; }
+  .stodo-app .calendar-navigation h2 { font-size: 16px; }
+  .stodo-app .stat-item { padding: 11px 13px; }
+  .stodo-app .stat-item > p { font-size: 10px; }
+  .stodo-app .view-caption { display: none; }
+  .stodo-app .calendar-legend > span { display: none; }
+  .stodo-app .editor-container { padding: 25px; }
+}
+@media (max-width: 950px) {
+  .stodo-app .app-rail { width: 49px; }
+  .stodo-app .rail-button.rail-active::before { left: -6px; }
+  .stodo-app .task-sidebar { width: 250px; }
+  .stodo-app .task-cards { padding-left: 14px; padding-right: 10px; }
+  .stodo-app .sidebar-brand { padding: 25px 15px; }
+  .stodo-app .sidebar-title { padding-left: 16px; }
+  .stodo-app .search-box, .stodo-app .task-filters { margin-left: 14px; margin-right: 14px; }
+  .stodo-app .list-subheading { margin-left: 16px; margin-right: 15px; }
+  .stodo-app .workspace-scroll { padding: 12px 17px 0; }
+  .stodo-app .workspace-topbar { padding: 0 17px; }
+  .stodo-app .workspace-top-actions { gap: 3px; }
+  .stodo-app .save-status { margin-right: 3px; font-size: 11px; }
+  .stodo-app .stats-row { gap: 7px; }
+  .stodo-app .stat-item { padding: 10px; }
+  .stodo-app .stat-item > p { display: none; }
+  .stodo-app .stat-icon { width: 23px; height: 23px; }
+  .stodo-app .stat-icon > svg { width: 14px; }
+  .stodo-app .stat-item > strong { font-size: 25px; margin-top: 6px; margin-bottom: 4px; }
+  .stodo-app .calendar-heading { padding: 15px 13px; flex-wrap: wrap; }
+  .stodo-app .calendar-navigation { flex: 1; justify-content: space-between; }
+  .stodo-app .calendar-filters { margin-left: auto; }
+  .stodo-app .view-toolbar { padding: 13px; }
+  .stodo-app .view-switcher > button { padding-left: 12px; padding-right: 12px; }
+  .stodo-app .month-cell { padding-left: 3px; padding-right: 3px; }
+  .stodo-app .month-grid { grid-template-rows: auto !important; grid-auto-rows: minmax(98px, 1fr); }
+  .stodo-app .calendar-event { font-size: 11px; padding-left: 3px; padding-right: 3px; }
+  .stodo-app .calendar-legend { padding: 11px; }
+  .stodo-app .overview-tasks > li > button { gap: 8px; }
+  .stodo-app .year-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 13px 20px; gap: 25px 15px; }
+  .stodo-app .agenda-view:not(.agenda-single) { overflow-x: auto; grid-template-columns: repeat(7, minmax(100px, 1fr)); }
+  .stodo-app .form-time-row { display: block; }
+  .stodo-app .time-row-divider { display: none; }
+  .stodo-app .form-options-row { gap: 20px; }
+  .stodo-app .completion-button { font-size: 11px; padding: 5px; }
+  .stodo-app .reminder-setting { flex-wrap: wrap; }
+  .stodo-app .reminder-setting > .select-wrap { margin-left: 30px; flex: 1; }
+}
+@media (max-width: 700px) {
+  .stodo-app .task-sidebar { position: absolute; z-index: 35; left: 49px; top: 0; bottom: 0; width: 270px; box-shadow: 8px 0 25px var(--sx-shadow); }
+  .stodo-app.plugin-mode .task-sidebar { left: 0; }
+  .stodo-app .main-workspace { width: calc(100% - 49px); }
+  .stodo-app .workspace-scroll { padding: 10px 12px 0; }
+  .stodo-app .workspace-topbar { padding: 0 12px; }
+  .stodo-app .save-status { display: none; }
+  .stodo-app .workspace-title { gap: 8px; }
+  .stodo-app .workspace-title h1 { font-size: 17px; letter-spacing: 0; }
+  .stodo-app .workspace-title > img[data-todo-icon="PluginIcon"] { width: 17px; height: 17px; }
+  .stodo-app .page-intro p { font-size: 12px; }
+  .stodo-app .stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stodo-app .stat-top { font-size: 12px; }
+  .stodo-app .stat-item > strong { font-size: 25px; }
+  .stodo-app .view-toolbar { gap: 10px; padding: 11px; }
+  .stodo-app .view-switcher > button { padding-left: 10px; padding-right: 10px; }
+  .stodo-app .new-task-button { padding: 0 9px; font-size: 12px; gap: 4px; }
+  .stodo-app .week-labels span { padding-left: 8px; font-size: 11px; }
+  .stodo-app .cell-top { gap: 1px; }
+  .stodo-app .today-label { display: none; }
+  .stodo-app .cell-add { width: 12px; }
+  .stodo-app .calendar-event { font-size: 10px; padding: 4px 2px; }
+  .stodo-app .day-number { width: 21px; height: 21px; font-size: 12px; }
+  .stodo-app .day-overview { padding: 13px; }
+  .stodo-app .editor-container { padding: 22px 15px; }
+  .stodo-app .editor-heading { gap: 9px; flex-wrap: wrap; }
+  .stodo-app .editor-heading h2 { font-size: 19px; }
+  .stodo-app .form-options-row { display: block; }
+  .stodo-app .calendar-navigation h2 { font-size: 14px; }
+  .stodo-app .calendar-filters { gap: 5px; }
+  .stodo-app .calendar-legend > div { gap: 13px; font-size: 10px; }
+  .stodo-app .workspace-footer { font-size: 10px; }
+  .stodo-app .sx-modal { padding: 28px 23px; }
+}
+@media (prefers-reduced-motion: reduce) { :where(.stodo-app, .stodo-dock) * { animation: none !important; transition: none !important; } }
